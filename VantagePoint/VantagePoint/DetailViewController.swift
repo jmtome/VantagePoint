@@ -12,10 +12,8 @@ import CoreLocation
 
 protocol DetailViewControllerDelegate: class {
     func detailViewController(_ vc: DetailViewController, didAddNewData data: VantagePoint)
-    func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint, indexPath: IndexPath)
+    func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint)
 }
-
-//func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
 class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
 
@@ -38,7 +36,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
     var location = VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "capital of england")
 
     var newPlace: VantagePoint?
-    var passedIndexPath: IndexPath?
     
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -46,34 +43,18 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
         
         if self.isMovingFromParent {
             if editWasToggled {
-                newPlace = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
-                self.delegate?.detailViewController(self, didUpdateDataWith: newPlace!, indexPath: passedIndexPath!)
+                newPlace?.placeName = placeTextField.text
+                newPlace?.location = location
+                newPlace?.placeImage = vpImage.image
+                
+                //newPlace = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
+                self.delegate?.detailViewController(self, didUpdateDataWith: newPlace!)
             }
         }
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        if let place = newPlace {
-//            vpImage.image = place.placeImage
-//            latitude.text = String(format: "%.2f", place.location.coordinate.latitude)
-//            longitude.text = String(format: "%.2f", place.location.coordinate.longitude)
-//            placeTextField.text = place.placeName
-//            print(latitude.text)
-//            print(longitude.text)
-//            location = place.location
-//
-//        } else {
-//            //newplace wasnt passed and this is a new view
-//            latitude.text = String(format: "%.2f", location.coordinate.latitude)
-//            longitude.text = String(format: "%.2f", location.coordinate.longitude)
-//            if let location = newPlace?.location {
-//                self.location = location
-//            }
-//        }
-//
-//
-//    }
+
+    
     
     
     
@@ -86,8 +67,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
             latitude.text = String(format: "%.2f", place.location.coordinate.latitude)
             longitude.text = String(format: "%.2f", place.location.coordinate.longitude)
             placeTextField.text = place.placeName
-            print(latitude.text)
-            print(longitude.text)
+            print(latitude.text!)
+            print(longitude.text!)
             location = place.location
             
         } else {
@@ -189,11 +170,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
         mapView.addAnnotation(myPin)
     }
     @objc func save() {
-        //let doubleLat = Double(latitude.text!) ?? 10
-        //let doubleLong = Double(longitude.text!) ?? 10
-        
-        //let location = VPLocation(title: placeTextField.text!, coordinate: CLLocationCoordinate2D(latitude: doubleLat, longitude: doubleLong), info: "someplace")
-        
+     
         
         let newPoint = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
         
@@ -340,21 +317,18 @@ extension DetailViewController: UIImagePickerControllerDelegate, UINavigationCon
 //
 //        if let jpegData = image.jpegData(compressionQuality: 0.8) {
 //            try? jpegData.write(to: imagePath)
-//        }
-
-
-        vpImage.image = image
-//        newPlace = VantagePoint(placeName: "unknown", location: london, placeImage: image)
-
-        
-        dismiss(animated: true)
+        //        }
+        picker.dismiss(animated: true) {
+            self.vpImage.image = image
+            
+        }
     }
     
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        return documentsDirectory
-    }
+//    func getDocumentsDirectory() -> URL {
+//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+//        let documentsDirectory = paths[0]
+//        return documentsDirectory
+//    }
     
 }
 extension UITextField {

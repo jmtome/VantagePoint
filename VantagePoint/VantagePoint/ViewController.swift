@@ -102,7 +102,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         vc.delegate = self
         vc.isButtonHidden = true
         vc.newPlace = places[indexPath.row]
-        vc.passedIndexPath = indexPath
         navigationController?.pushViewController(vc, animated: true)
 //        vc.modalPresentationStyle = .pageSheet
 //        present(vc, animated: true, completion: nil)
@@ -120,11 +119,19 @@ extension ViewController: DetailViewControllerDelegate {
         tableView.reloadData()
     }
     
-    func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint, indexPath: IndexPath) {
-        print(places[indexPath.row])
-        places[indexPath.row] = data
+    func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint) {
+        
+        let vpUUID = data.uuid
+        print(vpUUID)
+        
+        let vpIndex = places.firstIndex { place in
+            place.uuid == vpUUID
+        }
+        
+        print(places[vpIndex! as Int])
+        places[vpIndex! as Int] = data
         print("after")
-        print(places[indexPath.row])
+        print(places[vpIndex! as Int])
         tableView.reloadData()
     }
     

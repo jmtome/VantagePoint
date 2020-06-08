@@ -25,6 +25,6 @@ struct VantagePoint {
     var placeName: String?
     var location: VPLocation
     var placeImage: UIImage?
-    
+    var uuid: UUID = UUID()
 }
 
