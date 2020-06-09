@@ -10,14 +10,23 @@ import UIKit
 import MapKit
 import CoreLocation
 
+
+// MARK: - Delegate Protocol Prototypes
 protocol DetailViewControllerDelegate: class {
     func detailViewController(_ vc: DetailViewController, didAddNewData data: VantagePoint)
     func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint)
 }
 
-class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
 
-    @IBOutlet weak var rightButton: UIButton!
+// MARK: - Main Class
+class DetailViewController: UIViewController {
+    
+    // MARK: - Delegate
+    weak var delegate: DetailViewControllerDelegate?
+    
+    // MARK: - Outlets
+    
+    @IBOutlet var rightButton: UIButton!
     @IBOutlet var vpImage: UIImageView!
     @IBOutlet var placeTextField: UITextField!
     @IBOutlet var mapView: MKMapView!
@@ -29,38 +38,20 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
     }
     @IBOutlet var addPhotoButton: UIButton!
     
+    
+    // MARK: - Properties
+    
     var editWasToggled = false
     var isButtonHidden = false
-    weak var delegate: DetailViewControllerDelegate?
-    
     var location = VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "capital of england")
-
+    
     var newPlace: VantagePoint?
     
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        if self.isMovingFromParent {
-            if editWasToggled {
-                newPlace?.placeName = placeTextField.text
-                newPlace?.location = location
-                newPlace?.placeImage = vpImage.image
-                
-                //newPlace = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
-                self.delegate?.detailViewController(self, didUpdateDataWith: newPlace!)
-            }
-        }
-    }
-    
 
-    
-    
-    
+    // MARK: - View Cycle Overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         if let place = newPlace {
             vpImage.image = place.placeImage
@@ -79,7 +70,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
                 self.location = location
             }
         }
-
+        
         rightButton.isHidden = isButtonHidden
         navigationItem.rightBarButtonItem = editButtonItem
         
@@ -93,19 +84,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
         mapView.layer.masksToBounds = true
         mapView.layer.cornerRadius = 20
         rightButton.setTitle("Add", for: .normal)
+        
         latitude.delegate = self
         longitude.delegate = self
-
-        //vpImage.roundCornersForAspectFit(radius: 20)
-
-        
         placeTextField.delegate = self
-        rightButton.addTarget(self, action: #selector(save), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(addNew), for: .touchUpInside)
         
         mapView.delegate = self
         let center: CLLocationCoordinate2D = location.coordinate
         
-        //let center: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275)
         mapView.setCenter(center, animated: true)
         
         
@@ -121,73 +108,29 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
         
         // Added UIGestureRecognizer to MapView.
         mapView.addGestureRecognizer(myLongPress)
-
-        
         
         mapView.addAnnotation(location)
-        //var vcPlace = VPLocation(title: placeTextField.text!, coordinate: T##CLLocationCoordinate2D, info: T##String)
     }
     
-    // En el estado que esta, me esta transfiriendo los datos de adonde se encuentra el drop pin,
-    // cree un VPLocation londres, el cual uso para crear el VantagePoint cuando apreto el add, y las coordenadas
-    // inicialmente son london, pero luego, si hago dragpin, se mueven ahi, y use el metodo delegado de mapview
-    // para que le cambie las coordenadas a london y luego cuando apreto ADD, crea un nuevo VantagePoint
-    // para el cual utiliza london de VPLocation, y lo envia, y por ende lo envia con las coordeandas de mapa, pero no
-    // las coordeandas ingresadas por el usuario
-    // luego muestro esas coordeandas y ese nombre en el tableview del comienzo.
-    //
-    
-    
-    
-    
-    // A method called when long press is detected.
-    @objc private func recognizeLongPress(_ sender: UILongPressGestureRecognizer) {
-        // Do not generate pins many times during long press.
-        if sender.state != UIGestureRecognizer.State.began {
-            return
-            
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.isMovingFromParent {
+            if editWasToggled {
+                newPlace?.placeName = placeTextField.text
+                newPlace?.location = location
+                newPlace?.placeImage = vpImage.image
+                
+                //newPlace = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
+                self.delegate?.detailViewController(self, didUpdateDataWith: newPlace!)
+            }
         }
-        
-        // Get the coordinates of the point you pressed long.
-        let location = sender.location(in: mapView)
-        
-        // Convert location to CLLocationCoordinate2D.
-        let myCoordinate: CLLocationCoordinate2D = mapView.convert(location, toCoordinateFrom: mapView)
-        
-        // Generate pins.
-        let myPin: VPLocation = VPLocation(title: "dropped", coordinate: myCoordinate, info: "some dropped info")
-        
-        // Set the coordinates.
-        //myPin.coordinate = myCoordinate
-        
-        // Set the title.
-        //myPin.title = "title"
-        
-        // Set subtitle.
-        //myPin.subtitle = "subtitle"
-        
-        // Added pins to MapView.
-        mapView.addAnnotation(myPin)
-    }
-    @objc func save() {
-     
-        
-        let newPoint = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
-        
-        
-        
-        self.dismiss(animated: true, completion:{
-            self.delegate?.detailViewController(self, didAddNewData: newPoint)
-        
-        })
-        
-        
     }
     
-    
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: true)
-
+        
         if editing {
             placeTextField.isEnabled = true
             latitude.isEnabled = true
@@ -202,55 +145,105 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
             addPhotoButton.isEnabled = false
         }
     }
+    
+    // MARK: - Private Methods
+    
+    @objc private func addNew() {
+        let newPoint = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
+        
+        self.dismiss(animated: true, completion: {
+            self.delegate?.detailViewController(self, didAddNewData: newPoint)
+        })
+    }
+    @IBAction private func addPhoto(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    // A method called when long press is detected.
+    @objc private func recognizeLongPress(_ sender: UILongPressGestureRecognizer) {
+        // Do not generate pins many times during long press.
+        if sender.state != UIGestureRecognizer.State.began { return }
+        
+        // Get the coordinates of the point you pressed long.
+        let location = sender.location(in: mapView)
+        
+        // Convert location to CLLocationCoordinate2D.
+        let myCoordinate: CLLocationCoordinate2D = mapView.convert(location, toCoordinateFrom: mapView)
+        
+        // Generate pins.
+        let myPin: VPLocation = VPLocation(title: "dropped", coordinate: myCoordinate, info: "some dropped info")
+        
+        // Added pins to MapView.
+        mapView.addAnnotation(myPin)
+    }
+    
+    
+}
+
+// MARK: - UIImagePickerControllerDelegate Conformance
+extension DetailViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.originalImage] as? UIImage else { return }
+        
+        //        let imageName = UUID().uuidString
+        //        let imagePath = getDocumentsDirectory().appendingPathComponent(imageName)
+        //
+        //        if let jpegData = image.jpegData(compressionQuality: 0.8) {
+        //            try? jpegData.write(to: imagePath)
+        //        }
+        picker.dismiss(animated: true, completion:{
+            self.vpImage.image = image
+        })
+    }
+    
+    //    func getDocumentsDirectory() -> URL {
+    //        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    //        let documentsDirectory = paths[0]
+    //        return documentsDirectory
+    //    }
+    
+}
+
+// MARK: - UITextFieldDelegate Conformance
+extension DetailViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField.tag == 1 || textField.tag == 2 {
             textField.keyboardType = .decimalPad
         }
     }
-    
-    
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
-
         mapView.removeAnnotations(mapView.annotations)
         if textField.tag == 1 {
             // should probably make a sanity check but since keyboard is only decimal i wont
             location.coordinate.latitude = Double(textField.text!) ?? 0.0
-            
         }
         if textField.tag == 2 {
             location.coordinate.longitude = Double(textField.text!) ?? 0.0
         }
         mapView.addAnnotation(location)
     }
-    
-    
-        
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
-    
-    
-    @objc func addVP() {
-        print("pepe")
-    }
+}
 
-    
-    
+
+
+// MARK: - MKMapViewDelegate Conformance
+extension DetailViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard annotation is VPLocation else { return nil }
-
         let identifier = "VPLocation"
-
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
         
         if annotationView == nil {
             annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             annotationView?.canShowCallout = true
-            
             annotationView?.isDraggable = true
-            
             
             let btn = UIButton(type: .detailDisclosure)
             annotationView?.rightCalloutAccessoryView = btn
@@ -259,25 +252,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
         } else {
             annotationView?.annotation = annotation
         }
-
         return annotationView
     }
-
+    
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationView.DragState, fromOldState oldState: MKAnnotationView.DragState) {
         
-        print("moved thingy")
         if let annotation = view.annotation {
             location.coordinate = annotation.coordinate
             latitude.text = String(format: "%f",location.coordinate.latitude)
             longitude.text = String(format: "%f", location.coordinate.longitude)
         }
-        
     }
-
-    
-    
-    
-    
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
         if control == view.leftCalloutAccessoryView {
@@ -287,68 +272,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, MKMapViewDele
         
         
         guard let vplocation = view.annotation as? VPLocation else { return }
-
         let placeName = String(format: "%f", vplocation.coordinate.latitude)
         let placeInfo = String(format: "%f", vplocation.coordinate.longitude)
-
+        
         let ac = UIAlertController(title: placeName, message: placeInfo, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
     }
-    
-    
-    @IBAction func addPhoto(_ sender: UIButton) {
-        let picker = UIImagePickerController()
-        picker.allowsEditing = true
-        picker.delegate = self
-        present(picker, animated: true)
-        
-    }
-    
-}
-
-extension DetailViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let image = info[.originalImage] as? UIImage else { return }
-
-//        let imageName = UUID().uuidString
-//        let imagePath = getDocumentsDirectory().appendingPathComponent(imageName)
-//
-//        if let jpegData = image.jpegData(compressionQuality: 0.8) {
-//            try? jpegData.write(to: imagePath)
-        //        }
-        picker.dismiss(animated: true) {
-            self.vpImage.image = image
-            
-        }
-    }
-    
-//    func getDocumentsDirectory() -> URL {
-//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//        let documentsDirectory = paths[0]
-//        return documentsDirectory
-//    }
-    
-}
-extension UITextField {
-    func addDoneCancelToolbar(onDone: (target: Any, action: Selector)? = nil, onCancel: (target: Any, action: Selector)? = nil) {
-        let onCancel = onCancel ?? (target: self, action: #selector(cancelButtonTapped))
-        let onDone = onDone ?? (target: self, action: #selector(doneButtonTapped))
-
-        let toolbar: UIToolbar = UIToolbar()
-        toolbar.barStyle = .default
-        toolbar.items = [
-            UIBarButtonItem(title: "Cancel", style: .plain, target: onCancel.target, action: onCancel.action),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(title: "Done", style: .done, target: onDone.target, action: onDone.action)
-        ]
-        toolbar.sizeToFit()
-
-        self.inputAccessoryView = toolbar
-    }
-
-    // Default actions:
-    @objc func doneButtonTapped() { self.resignFirstResponder() }
-    @objc func cancelButtonTapped() { self.resignFirstResponder() }
 }

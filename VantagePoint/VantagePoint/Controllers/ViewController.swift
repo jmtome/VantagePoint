@@ -14,7 +14,9 @@ import MapKit
 
 class ViewController: UIViewController {
     
+    // MARK: - Properties
     var places = [VantagePoint]()
+    
     let dummyElement: VantagePoint = {
         let coordinate = CLLocationCoordinate2D(latitude: 55.507222, longitude: -0.1275)
         let location = VPLocation(title: "MYPlace", coordinate: coordinate, info: "no info")
@@ -32,10 +34,10 @@ class ViewController: UIViewController {
     }()
     
     
+    // MARK: - View Cycle Overrides
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addVP))
         setupTableView()
         //let indexPath = IndexPath(row: 0, section: 0)
@@ -44,23 +46,23 @@ class ViewController: UIViewController {
     }
     
     
-    @objc func addVP() {
+    
+    // MARK: - Private Methods
+    @objc private func addVP() {
     
         let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
         vc.delegate = self
         vc.modalPresentationStyle = .pageSheet
         present(vc, animated: true, completion: nil)
-        
-        
-        
+
     }
     
     
-    func setupTableView() {
+    private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.register(MapViewCell.self, forCellReuseIdentifier: "cellId")
+        tableView.register(MapViewCell.self, forCellReuseIdentifier: MapViewCell.reuseIdentifier)
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
@@ -76,41 +78,32 @@ class ViewController: UIViewController {
 }
 
 
+// MARK: - UITableViewDelegate & UITableViewDataSource Conformance
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return places.count
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! MapViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: MapViewCell.reuseIdentifier, for: indexPath) as! MapViewCell
         let newPlace = places[indexPath.row]
         cell.place = newPlace
         return cell
-        
-        
     }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100.0
     }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
         vc.delegate = self
         vc.isButtonHidden = true
         vc.newPlace = places[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
-//        vc.modalPresentationStyle = .pageSheet
-//        present(vc, animated: true, completion: nil)
-        
-        
     }
-    
 }
 
+
+// MARK: - DetailViewControllerDelegate Conformance
 
 extension ViewController: DetailViewControllerDelegate {
     func detailViewController(_ vc: DetailViewController, didAddNewData data: VantagePoint) {
@@ -120,18 +113,11 @@ extension ViewController: DetailViewControllerDelegate {
     }
     
     func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint) {
-        
         let vpUUID = data.uuid
-        print(vpUUID)
-        
         let vpIndex = places.firstIndex { place in
             place.uuid == vpUUID
         }
-        
-        print(places[vpIndex! as Int])
         places[vpIndex! as Int] = data
-        print("after")
-        print(places[vpIndex! as Int])
         tableView.reloadData()
     }
     
