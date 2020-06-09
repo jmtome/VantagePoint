@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
+// TODO: - Check properties and their setUP
 
 // MARK: - Delegate Protocol Prototypes
 protocol DetailViewControllerDelegate: class {
@@ -58,8 +59,6 @@ class DetailViewController: UIViewController {
             latitude.text = String(format: "%.2f", place.location.coordinate.latitude)
             longitude.text = String(format: "%.2f", place.location.coordinate.longitude)
             placeTextField.text = place.placeName
-            print(latitude.text!)
-            print(longitude.text!)
             location = place.location
             
         } else {
@@ -72,6 +71,8 @@ class DetailViewController: UIViewController {
         }
         
         rightButton.isHidden = isButtonHidden
+        rightButton.setTitle("Add", for: .normal)
+
         navigationItem.rightBarButtonItem = editButtonItem
         
         if !isEditing && isButtonHidden {
@@ -81,20 +82,20 @@ class DetailViewController: UIViewController {
             addPhotoButton.isEnabled = false 
         }
         
-        mapView.layer.masksToBounds = true
-        mapView.layer.cornerRadius = 20
-        rightButton.setTitle("Add", for: .normal)
-        
+       
         latitude.delegate = self
         longitude.delegate = self
         placeTextField.delegate = self
+        mapView.delegate = self
+
         rightButton.addTarget(self, action: #selector(addNew), for: .touchUpInside)
         
-        mapView.delegate = self
         let center: CLLocationCoordinate2D = location.coordinate
         
         mapView.setCenter(center, animated: true)
-        
+        mapView.layer.masksToBounds = true
+        mapView.layer.cornerRadius = 20
+               
         
         // Specify the scale (display area).
         let mySpan: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)

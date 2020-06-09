@@ -12,18 +12,10 @@ import MapKit
 
 
 
-class ViewController: UIViewController {
+class RootViewController: UIViewController {
     
     // MARK: - Properties
     var places = [VantagePoint]()
-    
-    let dummyElement: VantagePoint = {
-        let coordinate = CLLocationCoordinate2D(latitude: 55.507222, longitude: -0.1275)
-        let location = VPLocation(title: "MYPlace", coordinate: coordinate, info: "no info")
-    
-        let el = VantagePoint(placeName: "place0", location: location, placeImage: UIImage(systemName: "cloud"))
-        return el
-    }()
     
     let tableView: UITableView = {
         let tv = UITableView()
@@ -32,55 +24,66 @@ class ViewController: UIViewController {
         tv.separatorColor = UIColor.blue
         return tv
     }()
-    
-    
+
     // MARK: - View Cycle Overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addVP))
+        
+        navBarSetup()
         setupTableView()
-        //let indexPath = IndexPath(row: 0, section: 0)
-        //places.insert(dummyElement, at: 0)
-        //tableView.insertRows(at: [indexPath], with: .left)
+        //addDummyCells()
     }
-    
+        
+
     
     
     // MARK: - Private Methods
+    private func navBarSetup() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addVP))
+        navigationItem.rightBarButtonItem?.tintColor = .blue
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = "My Places."
+    }
+    private func addDummyCells() {
+        
+        let dummyElement: VantagePoint = {
+            let coordinate = CLLocationCoordinate2D(latitude: 55.507222, longitude: -0.1275)
+            let location = VPLocation(title: "MYPlace", coordinate: coordinate, info: "no info")
+        
+            let el = VantagePoint(placeName: "place0", location: location, placeImage: UIImage(systemName: "cloud"))
+            return el
+        }()
+        
+        places.insert(dummyElement, at: 0)
+        let indexPath = IndexPath(item: 0, section: 0)
+        tableView.insertRows(at: [indexPath], with: .left)
+
+    }
     @objc private func addVP() {
     
         let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
         vc.delegate = self
         vc.modalPresentationStyle = .pageSheet
         present(vc, animated: true, completion: nil)
-
     }
     
     
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        
         tableView.register(MapViewCell.self, forCellReuseIdentifier: MapViewCell.reuseIdentifier)
         view.addSubview(tableView)
         
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
-        ])
+        tableView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
     }
-    
-    
     
 }
 
 
 // MARK: - UITableViewDelegate & UITableViewDataSource Conformance
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension RootViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return places.count
     }
@@ -105,7 +108,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - DetailViewControllerDelegate Conformance
 
-extension ViewController: DetailViewControllerDelegate {
+extension RootViewController: DetailViewControllerDelegate {
     func detailViewController(_ vc: DetailViewController, didAddNewData data: VantagePoint) {
         places.append(data)
         print(places[0])
@@ -120,5 +123,4 @@ extension ViewController: DetailViewControllerDelegate {
         places[vpIndex! as Int] = data
         tableView.reloadData()
     }
-    
 }

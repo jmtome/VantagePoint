@@ -9,6 +9,8 @@
 import Foundation
 import MapKit
 
+// TODO: - Implement UserDefaults with NSCoding
+
 class VPLocation: NSObject, MKAnnotation {
     var title: String?
     var coordinate: CLLocationCoordinate2D
