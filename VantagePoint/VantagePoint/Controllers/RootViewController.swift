@@ -11,7 +11,9 @@ import CoreLocation
 import MapKit
 
 
-
+// TODO: - Check what happens when I edit/delete/add places while in favorites mode
+// Initially i disabled adding while in favorites, also disabled moving and deleting
+// I also disabled didselectrowat, so no editing while in favorites mode
 
 class RootViewController: UIViewController {
     
@@ -139,6 +141,11 @@ extension RootViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard !isShowingFavorites else {
+            if let indexPathForSelectedRow = tableView.indexPathForSelectedRow {
+                tableView.deselectRow(at: indexPathForSelectedRow, animated: false)
+            }
+            return }
         let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
         vc.delegate = self
         vc.isButtonHidden = true
@@ -156,6 +163,10 @@ extension RootViewController: UITableViewDelegate, UITableViewDataSource {
         return false 
     }
     
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return !isShowingFavorites
+    }
+    
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let movedObject = places[sourceIndexPath.row]
         places.remove(at: sourceIndexPath.row)
@@ -164,7 +175,7 @@ extension RootViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
        
-        return tableView.isEditing ? .none : .delete
+        return (tableView.isEditing || isShowingFavorites) ? .none : .delete
         
     }
     
