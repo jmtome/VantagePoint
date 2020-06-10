@@ -28,5 +28,6 @@ struct VantagePoint {
     var location: VPLocation
     var placeImage: UIImage?
     var uuid: UUID = UUID()
+    var isFavourite: Bool
 }
 

@@ -27,6 +27,7 @@ class DetailViewController: UIViewController {
     
     // MARK: - Outlets
     
+    @IBOutlet var placeTitle: UITextField!
     @IBOutlet var rightButton: UIButton!
     @IBOutlet var vpImage: UIImageView!
     @IBOutlet var placeTextField: UITextField!
@@ -38,15 +39,27 @@ class DetailViewController: UIViewController {
         didSet { longitude?.addDoneCancelToolbar() }
     }
     @IBOutlet var addPhotoButton: UIButton!
+    @IBOutlet var favouriteToggle: UIImageView!
     
     
     // MARK: - Properties
     
     var editWasToggled = false
     var isButtonHidden = false
-    var location = VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "capital of england")
+    //var location = VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "capital of england")
+    var location: VPLocation!
     
-    var newPlace: VantagePoint?
+    var locations: [VPLocation] = [
+        VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "Capital of england"),
+        VPLocation(title: "Oslo", coordinate: CLLocationCoordinate2D(latitude: 59.95, longitude: 10.75), info: "Capital of Norway"),
+        VPLocation(title: "Paris", coordinate: CLLocationCoordinate2D(latitude: 48.8567, longitude: 2.3508), info: "Capital of France"),
+        VPLocation(title: "Rome", coordinate: CLLocationCoordinate2D(latitude: 41.9, longitude: 12.5), info: "Capital of Italy"),
+        VPLocation(title: "Washington-DC", coordinate: CLLocationCoordinate2D(latitude: 38.895111, longitude: -77.036667), info: "Capital of USA"),
+    ]
+
+    
+    
+    var newPlace: VantagePoint!
     
 
     // MARK: - View Cycle Overrides
@@ -54,20 +67,31 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let favToggleButton = UITapGestureRecognizer(target: self, action: #selector(toggleFavourite))
+        
+        favouriteToggle.addGestureRecognizer(favToggleButton)
+        
+        favouriteToggle.isUserInteractionEnabled = true
+
+        
         if let place = newPlace {
             vpImage.image = place.placeImage
             latitude.text = String(format: "%.2f", place.location.coordinate.latitude)
             longitude.text = String(format: "%.2f", place.location.coordinate.longitude)
-            placeTextField.text = place.placeName
+            placeTitle.text = place.placeName
+            placeTextField.text = place.location.info
             location = place.location
-            
+            favouriteToggle.isHighlighted = place.isFavourite
         } else {
             //newplace wasnt passed and this is a new view
+            location = locations.randomElement()
             latitude.text = String(format: "%.2f", location.coordinate.latitude)
             longitude.text = String(format: "%.2f", location.coordinate.longitude)
-            if let location = newPlace?.location {
-                self.location = location
-            }
+            placeTextField.text = location.info
+            placeTitle.text = location.title
+            vpImage.image = UIImage(named: placeTitle.text!)
+//          
         }
         
         rightButton.isHidden = isButtonHidden
@@ -77,15 +101,18 @@ class DetailViewController: UIViewController {
         
         if !isEditing && isButtonHidden {
             placeTextField.isEnabled = false
+            placeTitle.isEnabled = false
             latitude.isEnabled = false
             longitude.isEnabled = false
-            addPhotoButton.isEnabled = false 
+            addPhotoButton.isEnabled = false
+            favouriteToggle.isUserInteractionEnabled = false
         }
         
        
         latitude.delegate = self
         longitude.delegate = self
         placeTextField.delegate = self
+        placeTitle.delegate = self
         mapView.delegate = self
 
         rightButton.addTarget(self, action: #selector(addNew), for: .touchUpInside)
@@ -118,10 +145,11 @@ class DetailViewController: UIViewController {
         
         if self.isMovingFromParent {
             if editWasToggled {
-                newPlace?.placeName = placeTextField.text
+                
+                newPlace?.placeName = placeTitle.text
                 newPlace?.location = location
                 newPlace?.placeImage = vpImage.image
-                
+                newPlace?.isFavourite = favouriteToggle.isHighlighted
                 //newPlace = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
                 self.delegate?.detailViewController(self, didUpdateDataWith: newPlace!)
             }
@@ -133,28 +161,42 @@ class DetailViewController: UIViewController {
         super.setEditing(editing, animated: true)
         
         if editing {
+            placeTitle.isEnabled = true
             placeTextField.isEnabled = true
             latitude.isEnabled = true
             longitude.isEnabled = true
             editWasToggled = true
             addPhotoButton.isEnabled = true
-            
+            favouriteToggle.isUserInteractionEnabled = true
         } else {
+            placeTitle.isEnabled = false
             placeTextField.isEnabled = false
             latitude.isEnabled = false
             longitude.isEnabled = false
             addPhotoButton.isEnabled = false
+            favouriteToggle.isUserInteractionEnabled = false
         }
     }
     
     // MARK: - Private Methods
     
     @objc private func addNew() {
-        let newPoint = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
+        print(location.info)
+        let newPoint = VantagePoint(placeName: placeTitle.text, location: location, placeImage: vpImage.image,isFavourite: favouriteToggle.isHighlighted)
         
         self.dismiss(animated: true, completion: {
             self.delegate?.detailViewController(self, didAddNewData: newPoint)
         })
+    }
+    @objc private func toggleFavourite(gesture: UIGestureRecognizer) {
+        // if the tapped view is a UIImageView then set it to imageview
+//        if (gesture.view as? UIImageView) != nil {
+//            print("Image Tapped")
+//            favouriteToggle.isHighlighted.toggle()
+//
+//        }
+        favouriteToggle.isHighlighted.toggle()
+
     }
     @IBAction private func addPhoto(_ sender: UIButton) {
         let picker = UIImagePickerController()

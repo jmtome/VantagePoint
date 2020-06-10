@@ -12,10 +12,14 @@ import MapKit
 
 
 
+
 class RootViewController: UIViewController {
     
     // MARK: - Properties
-    var places = [VantagePoint]()
+    var places: [VantagePoint] = [VantagePoint]()
+    var favorites: [VantagePoint] = [VantagePoint]()
+    
+    var isShowingFavorites: Bool = false
     
     let tableView: UITableView = {
         let tv = UITableView()
@@ -24,7 +28,7 @@ class RootViewController: UIViewController {
         tv.separatorColor = UIColor.blue
         return tv
     }()
-
+    
     // MARK: - View Cycle Overrides
     
     override func viewDidLoad() {
@@ -34,34 +38,68 @@ class RootViewController: UIViewController {
         setupTableView()
         //addDummyCells()
     }
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: true)
         
+        tableView.isEditing = editing
+  
+    }
 
+    override func viewWillAppear(_ animated: Bool) {
+        if let indexPathForSelectedRow = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: indexPathForSelectedRow, animated: false)
+        }
+    }
     
     
     // MARK: - Private Methods
     private func navBarSetup() {
+        let filterButton = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3.decrease.circle"), style: .plain, target: self, action: #selector(showFavorites(_:)))
+       
+        navigationItem.leftBarButtonItems = [editButtonItem, filterButton]
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addVP))
         navigationItem.rightBarButtonItem?.tintColor = .blue
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "My Places."
+    }
+    @objc private func showFavorites(_ sender: UIBarButtonItem) {
+    
+        print(isShowingFavorites)
+        //ideally I wouldn't have to do this, but i have found no way to just change the image
+        var filtered: UIBarButtonItem
+        if !isShowingFavorites {
+            filtered = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3.decrease.circle.fill"), style: .plain, target: self, action: #selector(showFavorites(_:)))
+            isShowingFavorites.toggle()
+            navigationItem.rightBarButtonItem?.isEnabled = false
+           
+        } else {
+            filtered = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3.decrease.circle"), style: .plain, target: self, action: #selector(showFavorites(_:)))
+            isShowingFavorites.toggle()
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+       
+        print(isShowingFavorites)
+        navigationItem.leftBarButtonItems = [editButtonItem, filtered]
+        tableView.reloadData()
     }
     private func addDummyCells() {
         
         let dummyElement: VantagePoint = {
             let coordinate = CLLocationCoordinate2D(latitude: 55.507222, longitude: -0.1275)
             let location = VPLocation(title: "MYPlace", coordinate: coordinate, info: "no info")
-        
-            let el = VantagePoint(placeName: "place0", location: location, placeImage: UIImage(systemName: "cloud"))
+            
+            let el = VantagePoint(placeName: "place0", location: location, placeImage: UIImage(systemName: "cloud"), isFavourite: false)
             return el
         }()
         
         places.insert(dummyElement, at: 0)
         let indexPath = IndexPath(item: 0, section: 0)
         tableView.insertRows(at: [indexPath], with: .left)
-
+        
     }
     @objc private func addVP() {
-    
+        
         let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
         vc.delegate = self
         vc.modalPresentationStyle = .pageSheet
@@ -70,6 +108,7 @@ class RootViewController: UIViewController {
     
     
     private func setupTableView() {
+        //tableView.isEditing = true
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(MapViewCell.self, forCellReuseIdentifier: MapViewCell.reuseIdentifier)
@@ -85,16 +124,19 @@ class RootViewController: UIViewController {
 
 extension RootViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return places.count
+    
+        return isShowingFavorites ? favorites.count : places.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MapViewCell.reuseIdentifier, for: indexPath) as! MapViewCell
-        let newPlace = places[indexPath.row]
+        
+        let newPlace: VantagePoint = isShowingFavorites ? favorites[indexPath.row] : places[indexPath.row]
         cell.place = newPlace
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100.0
+        
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
@@ -103,6 +145,30 @@ extension RootViewController: UITableViewDelegate, UITableViewDataSource {
         vc.newPlace = places[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            places.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .left)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false 
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedObject = places[sourceIndexPath.row]
+        places.remove(at: sourceIndexPath.row)
+        places.insert(movedObject, at: destinationIndexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+       
+        return tableView.isEditing ? .none : .delete
+        
+    }
+    
+  
 }
 
 
@@ -110,9 +176,14 @@ extension RootViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension RootViewController: DetailViewControllerDelegate {
     func detailViewController(_ vc: DetailViewController, didAddNewData data: VantagePoint) {
+//
         places.append(data)
-        print(places[0])
-        tableView.reloadData()
+        favorites = places.filter({ data in
+            data.isFavourite
+        })
+        let indexPath = IndexPath(row: places.count-1, section: 0)
+        tableView.insertRows(at: [indexPath], with: .left)
+        //tableView.reloadData()
     }
     
     func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint) {
@@ -121,6 +192,12 @@ extension RootViewController: DetailViewControllerDelegate {
             place.uuid == vpUUID
         }
         places[vpIndex! as Int] = data
-        tableView.reloadData()
+        favorites = places.filter({ data in
+            data.isFavourite
+        })
+        if let indexPath = tableView.indexPathForSelectedRow {
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        //tableView.reloadData()
     }
 }
