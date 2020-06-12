@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Contacts
 
 // TODO: - Check properties and their setUP
 
@@ -49,6 +50,7 @@ class DetailViewController: UIViewController {
     //var location = VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "capital of england")
     var location: VPLocation!
     
+    
     var locations: [VPLocation] = [
         VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "Capital of england"),
         VPLocation(title: "Oslo", coordinate: CLLocationCoordinate2D(latitude: 59.95, longitude: 10.75), info: "Capital of Norway"),
@@ -59,6 +61,8 @@ class DetailViewController: UIViewController {
 
     
     
+    var mapItem: MKMapItem!
+
     var newPlace: VantagePoint!
     
 
@@ -67,32 +71,46 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let address = [CNPostalAddressStreetKey: "181 Piccadilly, St. James's", CNPostalAddressCityKey: "London", CNPostalAddressPostalCodeKey: "W1A 1ER", CNPostalAddressISOCountryCodeKey: "GB"]
         
+        let place = MKPlacemark(coordinate: locations[0].coordinate, addressDictionary: address)
+        mapView.addAnnotation(place)
         let favToggleButton = UITapGestureRecognizer(target: self, action: #selector(toggleFavourite))
         
         favouriteToggle.addGestureRecognizer(favToggleButton)
         
         favouriteToggle.isUserInteractionEnabled = true
 
+//        if let mapItem = mapItem {
+//            latitude.text = String(format: "%.2f", mapItem.placemark.coordinate.latitude)
+//            longitude.text = String(format: "%.2f", mapItem.placemark.coordinate.longitude)
+//            placeTextField.text = mapItem.placemark.name
+//            placeTitle.text = mapItem.placemark.title
+//
+//
+//            //vpImage.image = UIImage(named: placeTitle.text!)
+//        }
         
         if let place = newPlace {
             vpImage.image = place.placeImage
             latitude.text = String(format: "%.2f", place.location.coordinate.latitude)
             longitude.text = String(format: "%.2f", place.location.coordinate.longitude)
             placeTitle.text = place.placeName
-            placeTextField.text = place.location.info
             location = place.location
+            placeTextField.text = "empty for now"
             favouriteToggle.isHighlighted = place.isFavourite
-        } else {
-            //newplace wasnt passed and this is a new view
-            location = locations.randomElement()
-            latitude.text = String(format: "%.2f", location.coordinate.latitude)
-            longitude.text = String(format: "%.2f", location.coordinate.longitude)
-            placeTextField.text = location.info
-            placeTitle.text = location.title
-            vpImage.image = UIImage(named: placeTitle.text!)
-//          
         }
+        
+//        else {
+//            //newplace wasnt passed and this is a new view
+//            location = locations.randomElement()
+//            latitude.text = String(format: "%.2f", location.coordinate.latitude)
+//            longitude.text = String(format: "%.2f", location.coordinate.longitude)
+//            placeTextField.text = location.info
+//            placeTitle.text = location.title
+//            vpImage.image = UIImage(named: placeTitle.text!)
+////
+//        }
         
         rightButton.isHidden = isButtonHidden
         rightButton.setTitle("Add", for: .normal)
@@ -119,6 +137,11 @@ class DetailViewController: UIViewController {
         
         let center: CLLocationCoordinate2D = location.coordinate
         
+        
+        
+        
+         
+        
         mapView.setCenter(center, animated: true)
         mapView.layer.masksToBounds = true
         mapView.layer.cornerRadius = 20
@@ -137,6 +160,7 @@ class DetailViewController: UIViewController {
         // Added UIGestureRecognizer to MapView.
         mapView.addGestureRecognizer(myLongPress)
         
+       // mapView.addAnnotation(mapItem.placemark)
         mapView.addAnnotation(location)
     }
     
@@ -179,14 +203,38 @@ class DetailViewController: UIViewController {
     }
     
     // MARK: - Private Methods
+    func coordinates(forAddress address: String, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) {
+            (placemarks, error) in
+            guard error == nil else {
+                print("Geocoding error: \(error!)")
+                completion(nil)
+                return
+            }
+            completion(placemarks?.first?.location?.coordinate)
+        }
+    }
     
+    @IBAction func showMap(_ sender: UIButton) {
+        let vc = storyboard?.instantiateViewController(identifier: "mapVC") as! MapViewController
+        let navBar = UINavigationController(rootViewController: vc)
+        
+        
+        present(navBar, animated: true)
+        
+        //navigationController?.pushViewController(vc, animated: true)
+    }
     @objc private func addNew() {
-        print(location.info)
+        print(location.info!)
         let newPoint = VantagePoint(placeName: placeTitle.text, location: location, placeImage: vpImage.image,isFavourite: favouriteToggle.isHighlighted)
         
-        self.dismiss(animated: true, completion: {
-            self.delegate?.detailViewController(self, didAddNewData: newPoint)
-        })
+        self.delegate?.detailViewController(self, didAddNewData: newPoint)
+        navigationController?.popToRootViewController(animated: true)
+        
+//        self.dismiss(animated: true, completion: {
+//            self.delegate?.detailViewController(self, didAddNewData: newPoint)
+//        })
     }
     @objc private func toggleFavourite(gesture: UIGestureRecognizer) {
         // if the tapped view is a UIImageView then set it to imageview
@@ -265,6 +313,13 @@ extension DetailViewController: UITextFieldDelegate {
         }
         if textField.tag == 2 {
             location.coordinate.longitude = Double(textField.text!) ?? 0.0
+        }
+        if textField.tag == 3 {
+            coordinates(forAddress: placeTitle.text!) { [weak self] (location) in
+                guard let location = location else { return }
+                
+                self?.location.coordinate = location
+            }
         }
         mapView.addAnnotation(location)
     }

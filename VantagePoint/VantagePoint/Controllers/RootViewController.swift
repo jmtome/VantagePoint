@@ -15,6 +15,8 @@ import MapKit
 // Initially i disabled adding while in favorites, also disabled moving and deleting
 // I also disabled didselectrowat, so no editing while in favorites mode
 
+//TODO: - Begin the design of new UI, UISearchBar with Mapkit to pre-position the user, 
+
 class RootViewController: UIViewController {
     
     // MARK: - Properties
@@ -27,7 +29,7 @@ class RootViewController: UIViewController {
         let tv = UITableView()
         tv.backgroundColor = UIColor.white
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.separatorColor = UIColor.blue
+        tv.separatorColor = UIColor.red
         return tv
     }()
     
@@ -101,11 +103,16 @@ class RootViewController: UIViewController {
         
     }
     @objc private func addVP() {
+        let vcMap = storyboard?.instantiateViewController(identifier: "mapVC") as! MapViewController
         
-        let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
-        vc.delegate = self
-        vc.modalPresentationStyle = .pageSheet
-        present(vc, animated: true, completion: nil)
+        vcMap.delegate = self
+        
+//        let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
+//        vc.delegate = self
+        
+        //vcMap.modalPresentationStyle = .pageSheet
+        navigationController?.pushViewController(vcMap, animated: true)
+ //       present(vcMap, animated: true, completion: nil)
     }
     
     
@@ -145,7 +152,11 @@ extension RootViewController: UITableViewDelegate, UITableViewDataSource {
             if let indexPathForSelectedRow = tableView.indexPathForSelectedRow {
                 tableView.deselectRow(at: indexPathForSelectedRow, animated: false)
             }
-            return }
+            return
+            
+        }
+        
+        
         let vc = storyboard?.instantiateViewController(identifier: "myModalView") as! DetailViewController
         vc.delegate = self
         vc.isButtonHidden = true
@@ -182,12 +193,8 @@ extension RootViewController: UITableViewDelegate, UITableViewDataSource {
   
 }
 
-
-// MARK: - DetailViewControllerDelegate Conformance
-
-extension RootViewController: DetailViewControllerDelegate {
-    func detailViewController(_ vc: DetailViewController, didAddNewData data: VantagePoint) {
-//
+extension RootViewController: MapViewControllerDelegate {
+    func mapViewController(_ vc: MapViewController, didAddNewData data: VantagePoint) {
         places.append(data)
         favorites = places.filter({ data in
             data.isFavourite
@@ -195,6 +202,13 @@ extension RootViewController: DetailViewControllerDelegate {
         let indexPath = IndexPath(row: places.count-1, section: 0)
         tableView.insertRows(at: [indexPath], with: .left)
         //tableView.reloadData()
+    }
+    
+    
+}
+extension RootViewController: DetailViewControllerDelegate {
+    func detailViewController(_ vc: DetailViewController, didAddNewData data: VantagePoint) {
+        print("no deberia estar nunca aca")
     }
     
     func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint) {
@@ -211,4 +225,54 @@ extension RootViewController: DetailViewControllerDelegate {
         }
         //tableView.reloadData()
     }
+    
+    
 }
+
+//    func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint) {
+//        let vpUUID = data.uuid
+//        let vpIndex = places.firstIndex { place in
+//            place.uuid == vpUUID
+//        }
+//        places[vpIndex! as Int] = data
+//        favorites = places.filter({ data in
+//            data.isFavourite
+//        })
+//        if let indexPath = tableView.indexPathForSelectedRow {
+//            tableView.reloadRows(at: [indexPath], with: .automatic)
+//        }
+//        //tableView.reloadData()
+//    }
+
+
+
+// MARK: - DetailViewControllerDelegate Conformance
+
+
+//extension RootViewController: DetailViewControllerDelegate {
+//    func detailViewController(_ vc: DetailViewController, didAddNewData data: VantagePoint) {
+////
+//        places.append(data)
+//        favorites = places.filter({ data in
+//            data.isFavourite
+//        })
+//        let indexPath = IndexPath(row: places.count-1, section: 0)
+//        tableView.insertRows(at: [indexPath], with: .left)
+//        //tableView.reloadData()
+//    }
+//
+//    func detailViewController(_ vc: DetailViewController, didUpdateDataWith data: VantagePoint) {
+//        let vpUUID = data.uuid
+//        let vpIndex = places.firstIndex { place in
+//            place.uuid == vpUUID
+//        }
+//        places[vpIndex! as Int] = data
+//        favorites = places.filter({ data in
+//            data.isFavourite
+//        })
+//        if let indexPath = tableView.indexPathForSelectedRow {
+//            tableView.reloadRows(at: [indexPath], with: .automatic)
+//        }
+//        //tableView.reloadData()
+//    }
+//}
