@@ -111,8 +111,8 @@ extension MapViewController: MKMapViewDelegate {
             //let btn = UIButton(type: .contactAdd)
         
             annotationView?.rightCalloutAccessoryView = button
-            let btn2 = UIButton(type: .close)
-            annotationView?.leftCalloutAccessoryView = btn2
+            //let btn2 = UIButton(type: .close)
+            //annotationView?.leftCalloutAccessoryView = btn2
         } else {
             annotationView?.annotation = annotation
         }
@@ -137,6 +137,7 @@ extension MapViewController: MKMapViewDelegate {
             //vc.newPlace = VantagePoint(from: mapItem, placeName: mapItem.placemark.title!, placeImage: #imageLiteral(resourceName: "Oslo"), isFavourite: false)
 //            vc.modalPresentationStyle = .pageSheet
 //            present(vc, animated: true)
+            //vc.navigationItem.rightBarButtonItem = editButtonItem
             navigationController?.pushViewController(vc, animated: true)
             //let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving]
             //mapItem.openInMaps(launchOptions: launchOptions)
