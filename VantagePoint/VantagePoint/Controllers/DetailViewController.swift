@@ -67,6 +67,8 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         
+        
+        
         //let address = [CNPostalAddressStreetKey: "181 Piccadilly, St. James's", CNPostalAddressCityKey: "London", CNPostalAddressPostalCodeKey: "W1A 1ER", CNPostalAddressISOCountryCodeKey: "GB"]
         //let place = MKPlacemark(coordinate: locations[0].coordinate, addressDictionary: address)
         //mapView.addAnnotation(place)
@@ -270,7 +272,10 @@ extension DetailViewController: UIImagePickerControllerDelegate, UINavigationCon
         //            try? jpegData.write(to: imagePath)
         //        }
         picker.dismiss(animated: true, completion:{
-            self.vpImage.image = image
+//            vpImage.image = vpImage.image?.roundedImage
+
+            self.vpImage.image = image.roundedImage
+            
         })
     }
     
