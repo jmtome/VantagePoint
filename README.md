@@ -5,4 +5,4 @@ App entry for the AppJam hackaton. App to store geographic places for photograph
 
 
 ![](animated.gif)
-![](./pic/pic1_50.png =100x20)
+
