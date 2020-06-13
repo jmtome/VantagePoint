@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Contacts
 
 // TODO: - Check properties and their setUP
 
@@ -27,8 +28,7 @@ class DetailViewController: UIViewController {
     
     // MARK: - Outlets
     
-    @IBOutlet var placeTitle: UITextField!
-    @IBOutlet var rightButton: UIButton!
+    @IBOutlet var placeTitle: UITextField! 
     @IBOutlet var vpImage: UIImageView!
     @IBOutlet var placeTextField: UITextField!
     @IBOutlet var mapView: MKMapView!
@@ -46,8 +46,9 @@ class DetailViewController: UIViewController {
     
     var editWasToggled = false
     var isButtonHidden = false
-    //var location = VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "capital of england")
+    
     var location: VPLocation!
+    
     
     var locations: [VPLocation] = [
         VPLocation(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "Capital of england"),
@@ -57,8 +58,6 @@ class DetailViewController: UIViewController {
         VPLocation(title: "Washington-DC", coordinate: CLLocationCoordinate2D(latitude: 38.895111, longitude: -77.036667), info: "Capital of USA"),
     ]
 
-    
-    
     var newPlace: VantagePoint!
     
 
@@ -68,37 +67,35 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         
+        //let address = [CNPostalAddressStreetKey: "181 Piccadilly, St. James's", CNPostalAddressCityKey: "London", CNPostalAddressPostalCodeKey: "W1A 1ER", CNPostalAddressISOCountryCodeKey: "GB"]
+        //let place = MKPlacemark(coordinate: locations[0].coordinate, addressDictionary: address)
+        //mapView.addAnnotation(place)
+        
         let favToggleButton = UITapGestureRecognizer(target: self, action: #selector(toggleFavourite))
         
         favouriteToggle.addGestureRecognizer(favToggleButton)
-        
         favouriteToggle.isUserInteractionEnabled = true
 
-        
+//
         if let place = newPlace {
             vpImage.image = place.placeImage
-            latitude.text = String(format: "%.2f", place.location.coordinate.latitude)
-            longitude.text = String(format: "%.2f", place.location.coordinate.longitude)
+            latitude.text = String(format: "%.3f", place.location.coordinate.latitude)
+            longitude.text = String(format: "%.3f", place.location.coordinate.longitude)
             placeTitle.text = place.placeName
-            placeTextField.text = place.location.info
             location = place.location
+            placeTextField.text = place.location.info
             favouriteToggle.isHighlighted = place.isFavourite
-        } else {
-            //newplace wasnt passed and this is a new view
-            location = locations.randomElement()
-            latitude.text = String(format: "%.2f", location.coordinate.latitude)
-            longitude.text = String(format: "%.2f", location.coordinate.longitude)
-            placeTextField.text = location.info
-            placeTitle.text = location.title
-            vpImage.image = UIImage(named: placeTitle.text!)
-//          
         }
-        
-        rightButton.isHidden = isButtonHidden
-        rightButton.setTitle("Add", for: .normal)
-
-        navigationItem.rightBarButtonItem = editButtonItem
-        
+ 
+        if navigationItem.rightBarButtonItem == nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNew))
+        } else {
+            // this is stupid, because I had already set it from the calling vc, but if i dont re-do this, it wont work with setEditing method..
+            // TODO: - check this bug
+            navigationItem.rightBarButtonItem = editButtonItem
+        }
+        print(isEditing)
+        print(isButtonHidden)
         if !isEditing && isButtonHidden {
             placeTextField.isEnabled = false
             placeTitle.isEnabled = false
@@ -115,17 +112,15 @@ class DetailViewController: UIViewController {
         placeTitle.delegate = self
         mapView.delegate = self
 
-        rightButton.addTarget(self, action: #selector(addNew), for: .touchUpInside)
         
         let center: CLLocationCoordinate2D = location.coordinate
-        
+
         mapView.setCenter(center, animated: true)
         mapView.layer.masksToBounds = true
         mapView.layer.cornerRadius = 20
-               
-        
+      
         // Specify the scale (display area).
-        let mySpan: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
+        let mySpan: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
         let myRegion: MKCoordinateRegion = MKCoordinateRegion(center: center, span: mySpan)
         
         // Add region to MapView.
@@ -137,9 +132,19 @@ class DetailViewController: UIViewController {
         // Added UIGestureRecognizer to MapView.
         mapView.addGestureRecognizer(myLongPress)
         
+       // mapView.addAnnotation(mapItem.placemark)
         mapView.addAnnotation(location)
     }
-    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//
+//        // Workaround for iOS 13 modal gap below navigationbar
+//        if #available(iOS 13.0, *) {
+//            DispatchQueue.main.async {
+//                self.navigationController?.navigationBar.setNeedsLayout()
+//            }
+//        }
+//    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -148,6 +153,7 @@ class DetailViewController: UIViewController {
                 
                 newPlace?.placeName = placeTitle.text
                 newPlace?.location = location
+                location.info = placeTextField.text
                 newPlace?.placeImage = vpImage.image
                 newPlace?.isFavourite = favouriteToggle.isHighlighted
                 //newPlace = VantagePoint(placeName: placeTextField.text, location: location, placeImage: vpImage.image)
@@ -179,14 +185,40 @@ class DetailViewController: UIViewController {
     }
     
     // MARK: - Private Methods
+    func coordinates(forAddress address: String, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) {
+            (placemarks, error) in
+            guard error == nil else {
+                print("Geocoding error: \(error!)")
+                completion(nil)
+                return
+            }
+            completion(placemarks?.first?.location?.coordinate)
+        }
+    }
     
+    @IBAction func showMap(_ sender: UIButton) {
+        let vc = storyboard?.instantiateViewController(identifier: "mapVC") as! MapViewController
+        let navBar = UINavigationController(rootViewController: vc)
+        
+        
+        present(navBar, animated: true)
+        
+        //navigationController?.pushViewController(vc, animated: true)
+    }
     @objc private func addNew() {
-        print(location.info)
+
+        location.info = placeTextField.text
+        
         let newPoint = VantagePoint(placeName: placeTitle.text, location: location, placeImage: vpImage.image,isFavourite: favouriteToggle.isHighlighted)
         
-        self.dismiss(animated: true, completion: {
-            self.delegate?.detailViewController(self, didAddNewData: newPoint)
-        })
+        self.delegate?.detailViewController(self, didAddNewData: newPoint)
+        navigationController?.popToRootViewController(animated: true)
+        
+//        self.dismiss(animated: true, completion: {
+//            self.delegate?.detailViewController(self, didAddNewData: newPoint)
+//        })
     }
     @objc private func toggleFavourite(gesture: UIGestureRecognizer) {
         // if the tapped view is a UIImageView then set it to imageview
@@ -259,12 +291,23 @@ extension DetailViewController: UITextFieldDelegate {
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
         mapView.removeAnnotations(mapView.annotations)
+        if textField.tag == 0 {
+            placeTextField.text = textField.text
+            print(placeTitle.isEnabled)
+        }
         if textField.tag == 1 {
             // should probably make a sanity check but since keyboard is only decimal i wont
             location.coordinate.latitude = Double(textField.text!) ?? 0.0
         }
         if textField.tag == 2 {
             location.coordinate.longitude = Double(textField.text!) ?? 0.0
+        }
+        if textField.tag == 3 {
+            coordinates(forAddress: placeTitle.text!) { [weak self] (location) in
+                guard let location = location else { return }
+                
+                self?.location.coordinate = location
+            }
         }
         mapView.addAnnotation(location)
     }
@@ -290,8 +333,8 @@ extension DetailViewController: MKMapViewDelegate {
             
             let btn = UIButton(type: .detailDisclosure)
             annotationView?.rightCalloutAccessoryView = btn
-            let btn2 = UIButton(type: .close)
-            annotationView?.leftCalloutAccessoryView = btn2
+            //let btn2 = UIButton(type: .close)
+            //annotationView?.leftCalloutAccessoryView = btn2
         } else {
             annotationView?.annotation = annotation
         }

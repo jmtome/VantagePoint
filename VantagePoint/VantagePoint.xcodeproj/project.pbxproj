@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		C8759B6A248AD4B90098004B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8759B69248AD4B90098004B /* Extensions.swift */; };
 		C8759B6C248AFD730098004B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8759B6B248AFD730098004B /* DetailViewController.swift */; };
+		C8773C6924931B490000FCFB /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8773C6824931B490000FCFB /* MapViewController.swift */; };
+		C8D1AF442493CF9C002A613B /* LocationSearchTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D1AF432493CF9C002A613B /* LocationSearchTable.swift */; };
 		C8D740202489BFE900EB91E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D7401F2489BFE900EB91E6 /* AppDelegate.swift */; };
 		C8D740222489BFE900EB91E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D740212489BFE900EB91E6 /* SceneDelegate.swift */; };
 		C8D740242489BFE900EB91E6 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D740232489BFE900EB91E6 /* RootViewController.swift */; };
@@ -22,6 +24,8 @@
 /* Begin PBXFileReference section */
 		C8759B69248AD4B90098004B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C8759B6B248AFD730098004B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		C8773C6824931B490000FCFB /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		C8D1AF432493CF9C002A613B /* LocationSearchTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationSearchTable.swift; path = VantagePoint/Controllers/LocationSearchTable.swift; sourceTree = SOURCE_ROOT; };
 		C8D7401C2489BFE900EB91E6 /* VantagePoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VantagePoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D7401F2489BFE900EB91E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8D740212489BFE900EB91E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,6 +54,8 @@
 			children = (
 				C8D740232489BFE900EB91E6 /* RootViewController.swift */,
 				C8759B6B248AFD730098004B /* DetailViewController.swift */,
+				C8773C6824931B490000FCFB /* MapViewController.swift */,
+				C8D1AF432493CF9C002A613B /* LocationSearchTable.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -201,10 +207,12 @@
 				C8D740362489CF7100EB91E6 /* VantagePointLocation.swift in Sources */,
 				C8D740242489BFE900EB91E6 /* RootViewController.swift in Sources */,
 				C8D740342489C2FE00EB91E6 /* MapViewCell.swift in Sources */,
+				C8D1AF442493CF9C002A613B /* LocationSearchTable.swift in Sources */,
 				C8D740202489BFE900EB91E6 /* AppDelegate.swift in Sources */,
 				C8D740222489BFE900EB91E6 /* SceneDelegate.swift in Sources */,
 				C8759B6A248AD4B90098004B /* Extensions.swift in Sources */,
 				C8759B6C248AFD730098004B /* DetailViewController.swift in Sources */,
+				C8773C6924931B490000FCFB /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
