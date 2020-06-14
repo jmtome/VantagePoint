@@ -96,3 +96,39 @@ extension UITextField {
     @objc private func doneButtonTapped() { self.resignFirstResponder() }
     @objc private func cancelButtonTapped() { self.resignFirstResponder() }
 }
+
+
+extension NSLayoutDimension {
+    @objc func constraint(equalToConstant constant: CGFloat, withIdentifier identifier: String) -> NSLayoutConstraint {
+        let constraint = self.constraint(equalToConstant: constant)
+        constraint.identifier = identifier
+        return constraint
+    }
+    @objc func constraint(equalTo anchor: NSLayoutDimension, multiplier: CGFloat, withIdentifier identifier: String) -> NSLayoutConstraint {
+        let constraint = self.constraint(equalTo: anchor, multiplier: multiplier)
+        constraint.identifier = identifier
+        return constraint 
+    }
+
+}
+extension NSLayoutAnchor {
+    @objc func constraint(equalTo anchor: NSLayoutAnchor, constant: CGFloat, withIdentifier identifier: String) -> NSLayoutConstraint {
+        let constraint = self.constraint(equalTo: anchor, constant: constant)
+        constraint.identifier = identifier
+        return constraint
+    }
+}
+
+extension UIView {
+    func constraint(withIdentifier: String) -> NSLayoutConstraint? {
+        return self.constraints.filter{ $0.identifier == withIdentifier }.first
+    }
+}
+extension UIView {
+    func pinEdges(to other: UIView) {
+        leadingAnchor.constraint(equalTo: other.leadingAnchor).isActive = true
+        trailingAnchor.constraint(equalTo: other.trailingAnchor).isActive = true
+        topAnchor.constraint(equalTo: other.topAnchor).isActive = true
+        bottomAnchor.constraint(equalTo: other.bottomAnchor).isActive = true
+    }
+}

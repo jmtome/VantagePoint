@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C80E5C4824958B84006D22B4 /* ExtraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E5C4724958B84006D22B4 /* ExtraViewController.swift */; };
+		C80E5C4A2495C4EE006D22B4 /* TestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E5C492495C4EE006D22B4 /* TestsViewController.swift */; };
+		C860812E2496958400E99308 /* ImageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C860812D2496958400E99308 /* ImageDetailViewController.swift */; };
 		C8759B6A248AD4B90098004B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8759B69248AD4B90098004B /* Extensions.swift */; };
 		C8759B6C248AFD730098004B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8759B6B248AFD730098004B /* DetailViewController.swift */; };
 		C8773C6924931B490000FCFB /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8773C6824931B490000FCFB /* MapViewController.swift */; };
@@ -22,6 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C80E5C4724958B84006D22B4 /* ExtraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExtraViewController.swift; path = VantagePoint/Controllers/ExtraViewController.swift; sourceTree = SOURCE_ROOT; };
+		C80E5C492495C4EE006D22B4 /* TestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsViewController.swift; sourceTree = "<group>"; };
+		C860812D2496958400E99308 /* ImageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewController.swift; sourceTree = "<group>"; };
 		C8759B69248AD4B90098004B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C8759B6B248AFD730098004B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		C8773C6824931B490000FCFB /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +62,9 @@
 				C8759B6B248AFD730098004B /* DetailViewController.swift */,
 				C8773C6824931B490000FCFB /* MapViewController.swift */,
 				C8D1AF432493CF9C002A613B /* LocationSearchTable.swift */,
+				C80E5C4724958B84006D22B4 /* ExtraViewController.swift */,
+				C860812D2496958400E99308 /* ImageDetailViewController.swift */,
+				C80E5C492495C4EE006D22B4 /* TestsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -206,9 +215,12 @@
 			files = (
 				C8D740362489CF7100EB91E6 /* VantagePointLocation.swift in Sources */,
 				C8D740242489BFE900EB91E6 /* RootViewController.swift in Sources */,
+				C80E5C4A2495C4EE006D22B4 /* TestsViewController.swift in Sources */,
 				C8D740342489C2FE00EB91E6 /* MapViewCell.swift in Sources */,
+				C80E5C4824958B84006D22B4 /* ExtraViewController.swift in Sources */,
 				C8D1AF442493CF9C002A613B /* LocationSearchTable.swift in Sources */,
 				C8D740202489BFE900EB91E6 /* AppDelegate.swift in Sources */,
+				C860812E2496958400E99308 /* ImageDetailViewController.swift in Sources */,
 				C8D740222489BFE900EB91E6 /* SceneDelegate.swift in Sources */,
 				C8759B6A248AD4B90098004B /* Extensions.swift in Sources */,
 				C8759B6C248AFD730098004B /* DetailViewController.swift in Sources */,
