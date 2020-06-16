@@ -10,6 +10,10 @@
 		C80E5C4824958B84006D22B4 /* ExtraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E5C4724958B84006D22B4 /* ExtraViewController.swift */; };
 		C80E5C4A2495C4EE006D22B4 /* TestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E5C492495C4EE006D22B4 /* TestsViewController.swift */; };
 		C860812E2496958400E99308 /* ImageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C860812D2496958400E99308 /* ImageDetailViewController.swift */; };
+		C86444D0249812F2002AE677 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86444CF249812F2002AE677 /* ImageViewController.swift */; };
+		C86444D224981C9B002AE677 /* Test2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86444D124981C9B002AE677 /* Test2ViewController.swift */; };
+		C86444D424985483002AE677 /* TVC3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86444D324985483002AE677 /* TVC3ViewController.swift */; };
+		C86444D6249857A3002AE677 /* GesturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86444D5249857A3002AE677 /* GesturesViewController.swift */; };
 		C8759B6A248AD4B90098004B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8759B69248AD4B90098004B /* Extensions.swift */; };
 		C8759B6C248AFD730098004B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8759B6B248AFD730098004B /* DetailViewController.swift */; };
 		C8773C6924931B490000FCFB /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8773C6824931B490000FCFB /* MapViewController.swift */; };
@@ -28,6 +32,10 @@
 		C80E5C4724958B84006D22B4 /* ExtraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExtraViewController.swift; path = VantagePoint/Controllers/ExtraViewController.swift; sourceTree = SOURCE_ROOT; };
 		C80E5C492495C4EE006D22B4 /* TestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsViewController.swift; sourceTree = "<group>"; };
 		C860812D2496958400E99308 /* ImageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewController.swift; sourceTree = "<group>"; };
+		C86444CF249812F2002AE677 /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		C86444D124981C9B002AE677 /* Test2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test2ViewController.swift; sourceTree = "<group>"; };
+		C86444D324985483002AE677 /* TVC3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVC3ViewController.swift; sourceTree = "<group>"; };
+		C86444D5249857A3002AE677 /* GesturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesViewController.swift; sourceTree = "<group>"; };
 		C8759B69248AD4B90098004B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C8759B6B248AFD730098004B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		C8773C6824931B490000FCFB /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -64,7 +72,11 @@
 				C8D1AF432493CF9C002A613B /* LocationSearchTable.swift */,
 				C80E5C4724958B84006D22B4 /* ExtraViewController.swift */,
 				C860812D2496958400E99308 /* ImageDetailViewController.swift */,
+				C86444CF249812F2002AE677 /* ImageViewController.swift */,
+				C86444D124981C9B002AE677 /* Test2ViewController.swift */,
+				C86444D324985483002AE677 /* TVC3ViewController.swift */,
 				C80E5C492495C4EE006D22B4 /* TestsViewController.swift */,
+				C86444D5249857A3002AE677 /* GesturesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -214,13 +226,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8D740362489CF7100EB91E6 /* VantagePointLocation.swift in Sources */,
+				C86444D224981C9B002AE677 /* Test2ViewController.swift in Sources */,
 				C8D740242489BFE900EB91E6 /* RootViewController.swift in Sources */,
 				C80E5C4A2495C4EE006D22B4 /* TestsViewController.swift in Sources */,
 				C8D740342489C2FE00EB91E6 /* MapViewCell.swift in Sources */,
 				C80E5C4824958B84006D22B4 /* ExtraViewController.swift in Sources */,
 				C8D1AF442493CF9C002A613B /* LocationSearchTable.swift in Sources */,
+				C86444D0249812F2002AE677 /* ImageViewController.swift in Sources */,
+				C86444D6249857A3002AE677 /* GesturesViewController.swift in Sources */,
 				C8D740202489BFE900EB91E6 /* AppDelegate.swift in Sources */,
 				C860812E2496958400E99308 /* ImageDetailViewController.swift in Sources */,
+				C86444D424985483002AE677 /* TVC3ViewController.swift in Sources */,
 				C8D740222489BFE900EB91E6 /* SceneDelegate.swift in Sources */,
 				C8759B6A248AD4B90098004B /* Extensions.swift in Sources */,
 				C8759B6C248AFD730098004B /* DetailViewController.swift in Sources */,

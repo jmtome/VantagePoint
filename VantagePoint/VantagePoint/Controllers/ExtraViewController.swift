@@ -44,12 +44,32 @@ class ExtraViewController: UIViewController {
     
     private let imageView: UIImageView = {
         let image = UIImageView(frame: .zero)
+        //image.backgroundColor = .black
+        //image.image = #imageLiteral(resourceName: "London")
         image.image = #imageLiteral(resourceName: "London").roundedImage
-        image.contentMode = .scaleAspectFit
-        image.widthAnchor.constraint(equalToConstant: screenHeight / 3, withIdentifier: "imageWidth").isActive = true
+        
+        image.contentMode = .scaleAspectFill
+        //image.clipsToBounds = true
+        //image.layer.cornerRadius = 50
         image.translatesAutoresizingMaskIntoConstraints = false
+        //image.widthAnchor.constraint(equalToConstant: screenHeight / 4, withIdentifier: "imageWidth").isActive = true
+
+        
         image.isUserInteractionEnabled = true
         return image
+    }()
+    
+    lazy var aMultiplier: CGFloat = {
+        return (imageView.image?.size.width)! / (imageView.image?.size.height)!
+    }()
+    
+    private let infoView: UIView = {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 20
+        return view
     }()
     
     private let closeButton: UIButton = {
@@ -65,6 +85,13 @@ class ExtraViewController: UIViewController {
         
     }()
 
+    private let weatherView: UIView = {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 20
+        return view
+    }()
     
     
     var toggleHeight: Bool = false
@@ -84,6 +111,22 @@ class ExtraViewController: UIViewController {
         mapView.addAnnotation(place)
         view.addSubview(imageView)
         view.addSubview(mapViewContainer)
+        view.addSubview(infoView)
+        view.addSubview(weatherView)
+        
+        weatherView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10).isActive = true
+        weatherView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
+        weatherView.heightAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 0.5).isActive = true
+        weatherView.bottomAnchor.constraint(equalTo: imageView.topAnchor, constant: -10).isActive = true
+        
+        infoView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+
+        infoView.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
+        infoView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
+        infoView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
+
+        
+        infoView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
         mapViewContainer.addSubview(mapView)
 //
         
@@ -102,8 +145,10 @@ class ExtraViewController: UIViewController {
         mapView.topAnchor.constraint(equalTo: mapViewContainer.topAnchor, constant: 0, withIdentifier: "mvTop").isActive = true
         
         imageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10, withIdentifier: "leftAnchor").isActive = true
-        imageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50, withIdentifier: "ivTopAnchor").isActive = true
-        
+        //imageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50, withIdentifier: "ivTopAnchor").isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: screenWidth / 1.5).isActive = true
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1 / aMultiplier).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: mapViewContainer.topAnchor, constant: -10).isActive = true
         mapViewContainer.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 10).isActive = true
         
         let touchGesture = UITapGestureRecognizer(target: self, action: #selector(enlargeView))
@@ -115,9 +160,9 @@ class ExtraViewController: UIViewController {
         
         
         mapViewContainer.heightAnchor.constraint(equalToConstant: (screenHeight - 30) / 2, withIdentifier: "heightAnchor").isActive = true
-      
-        
+
     }
+    
 
     
     @objc func close(_ sender: UIButton) {
@@ -147,15 +192,11 @@ class ExtraViewController: UIViewController {
     }
     
     @objc func enlargeView2(_ sender: UITapGestureRecognizer) {
-
+        let vc2 = GesturesViewController()
         let vc = ImageDetailViewController()
-        vc.view.backgroundColor = .white
-        //let navCon = UINavigationController(rootViewController: self)
-        
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
-        
-        
+        vc2.view.backgroundColor = .white
+       
+        navigationController?.pushViewController(vc2, animated: true)
         
         //if sender.state == .ended {
 //            toggleHeight.toggle()
@@ -188,7 +229,7 @@ class ExtraViewController: UIViewController {
             let c = mapViewContainer.constraint(withIdentifier: "heightAnchor")
             
             c?.isActive = false
-            mapViewContainer.heightAnchor.constraint(equalToConstant:screenHeight - 30, withIdentifier: "heightAnchor").isActive = true
+            mapViewContainer.heightAnchor.constraint(equalToConstant:screenHeight - 100, withIdentifier: "heightAnchor").isActive = true
             
             
 //            UIViewPropertyAnimator(duration: 1.5, dampingRatio: 0.5) {

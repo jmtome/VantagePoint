@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageDetailViewController: UIViewController {
+class ImageDetailViewController: UIViewController, UINavigationBarDelegate {
 
     private let imageView: UIImageView = {
         let image = UIImageView(frame: .zero)
@@ -27,19 +27,6 @@ class ImageDetailViewController: UIViewController {
         return table
     }()
     
-    private let closeButton: UIButton = {
-        let smallSquare = CGSize(width: 30, height: 30)
-        let button = UIButton(frame: CGRect(origin: .zero, size: smallSquare))
-        button.setBackgroundImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        button.tintColor = .black
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        //button.isUserInteractionEnabled = true
-
-        return button
-        
-    }()
     
 //     init(closeButton: UIButton) {
 //        self.closeButton = closeButton
@@ -56,22 +43,55 @@ class ImageDetailViewController: UIViewController {
         //se me ocurre que por algun motivo imageView tiene un marco no visible de background con color transparente y que al colocar el boton como subview del main view, sigue estando tapado por el imageview, y por eso no estaba andando...
         
         
-        //self.view.addSubview(closeButton)
         self.view.addSubview(imageView)
-        imageView.addSubview(closeButton)
-        closeButton.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
-        closeButton.leftAnchor.constraint(equalTo: imageView.leftAnchor).isActive = true
-//        closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40, withIdentifier: "closeBtnTop2").isActive = true
-//        closeButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20, withIdentifier: "closeBtnLeft2").isActive = true
-        closeButton.addTarget(self, action: #selector(close(_:)), for: .touchUpInside)
-
-        //imageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: -50, withIdentifier: "topAnchor").isActive = true
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+    
+        imageView.isUserInteractionEnabled = true
+        let gst = UITapGestureRecognizer(target: self, action: #selector(showImageInDetail))
+        imageView.addGestureRecognizer(gst)
+        
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -60).isActive = true
         imageView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
         //imageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         imageView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         // Do any additional setup after loading the view.
         setupTableView()
+        
+
+    }
+    @objc private func showImageInDetail(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            
+            let imgVC = ImageViewController(image: #imageLiteral(resourceName: "London"))
+//            let imageView: UIImageView = {
+//                let view = UIImageView(image: #imageLiteral(resourceName: "London"))
+//                return view
+//            }()
+            //let imgVC = Test2ViewController()
+            navigationController?.pushViewController(imgVC, animated: true)
+        }
+    }
+    
+    private func addNavigationBar() {
+        let height: CGFloat = 75
+        var statusBarHeight: CGFloat = 0
+        if #available(iOS 13.0, *) {
+            statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+        } else {
+            statusBarHeight = UIApplication.shared.statusBarFrame.height
+        }
+        let navbar = UINavigationBar(frame: CGRect(x: 0, y: statusBarHeight, width: UIScreen.main.bounds.width, height: height))
+        navbar.backgroundColor = UIColor.white
+        navbar.delegate = self as? UINavigationBarDelegate
+
+        let navItem = UINavigationItem()
+        navItem.title = "Sensor Data"
+        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(close))
+
+        navbar.items = [navItem]
+
+        view.addSubview(navbar)
+
+        self.view?.frame = CGRect(x: 0, y: height, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - height))
     }
     
     @objc func close(_ sender: UIButton) {
