@@ -16,7 +16,10 @@ import Contacts
 let screenWidth  = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
 
-class ExtraViewController: UIViewController {
+//let screenWidth = UIScreen.main.nativeBounds.width
+//let screenHeight = UIScreen.main.nativeBounds.height
+
+class ExtraViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     let mapView: MKMapView = {
         let view = MKMapView(frame: .zero)
@@ -95,6 +98,51 @@ class ExtraViewController: UIViewController {
         return view
     }()
     
+    private let nameTextField: UITextField = {
+        //let sampleTextField =  UITextField(frame: CGRect(x: 20, y: 100, width: 300, height: 40))
+        let sampleTextField = UITextField(frame: .zero)
+        sampleTextField.placeholder = "Enter text here"
+//        sampleTextField.font = UIFont.systemFont(ofSize: 15)
+        sampleTextField.font = UIFont.systemFont(ofSize: 40, weight: .light)
+        sampleTextField.borderStyle = UITextField.BorderStyle.none
+        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
+        sampleTextField.keyboardType = UIKeyboardType.default
+        sampleTextField.returnKeyType = UIReturnKeyType.done
+        sampleTextField.textAlignment = .center
+        //sampleTextField.clearButtonMode = UITextField.ViewMode.whileEditing
+        sampleTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        sampleTextField.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.center
+        sampleTextField.text = "London"
+        sampleTextField.translatesAutoresizingMaskIntoConstraints = false
+        return sampleTextField
+    }()
+    
+    private let infoTextField: UITextView = {
+            let infoTextField = UITextView(frame: .zero)
+            //infoTextField.placeholder = "Info"
+    //        infoTextField.font = UIFont.systemFont(ofSize: 15)
+            infoTextField.font = UIFont.systemFont(ofSize: 40, weight: .light)
+            //infoTextField.borderStyle = UITextField.BorderStyle.none
+            infoTextField.autocorrectionType = UITextAutocorrectionType.no
+            infoTextField.keyboardType = UIKeyboardType.default
+            infoTextField.returnKeyType = UIReturnKeyType.done
+            infoTextField.textAlignment = .left
+            //infoTextField.clearButtonMode = UITextField.ViewMode.whileEditing
+            //infoTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+            //infoTextField.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.center
+            infoTextField.text = "Info"
+            infoTextField.translatesAutoresizingMaskIntoConstraints = false
+            return infoTextField
+        }()
+    
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+    }
     
     var toggleHeight: Bool = false
     
@@ -107,53 +155,67 @@ class ExtraViewController: UIViewController {
     ]
     
     
+    @objc private func endEditing(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            nameTextField.resignFirstResponder()
+        }
+    }
+    
+    fileprivate func setupInfoView() {
+        view.addSubview(infoView)
+        infoView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        infoView.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
+        infoView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
+        infoView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
+        infoView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let tapper = UITapGestureRecognizer(target: self, action:#selector(endEditing))
+        tapper.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapper)
+        
         let address = [CNPostalAddressStreetKey: "181 Piccadilly, St. James's", CNPostalAddressCityKey: "London", CNPostalAddressPostalCodeKey: "W1A 1ER", CNPostalAddressISOCountryCodeKey: "GB"]
         let place = MKPlacemark(coordinate: locations[0].coordinate, addressDictionary: address)
         mapView.addAnnotation(place)
         view.addSubview(imageView)
         view.addSubview(mapViewContainer)
-        view.addSubview(infoView)
         view.addSubview(weatherView)
+    
+        nameTextField.delegate = self
         
-        addDrawerToMap()
-        
+        navigationItem.titleView = nameTextField
         setupWeatherView()
         
-        infoView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        setupInfoView()
         
-        infoView.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
-        infoView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
-        infoView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
-        
-        
-        infoView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
         mapViewContainer.addSubview(mapView)
-        //
         
-        mapView.topAnchor.constraint(equalTo: mapViewContainer.topAnchor).isActive = true
+        
+        let mvTop = mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        mvTop.isActive = true
+        //mapView.topAnchor.constraint(equalTo: mapViewContainer.topAnchor).isActive = true
         mapView.bottomAnchor.constraint(equalTo: mapViewContainer.bottomAnchor).isActive = true
         mapView.leftAnchor.constraint(equalTo: mapViewContainer.leftAnchor).isActive = true
         mapView.rightAnchor.constraint(equalTo: mapViewContainer.rightAnchor).isActive = true
         
-        
+        addDrawerToMap()
         
         mapViewContainer.addSubview(closeButton)
+        mapViewContainer.clipsToBounds = true
         closeButton.topAnchor.constraint(equalTo: mapViewContainer.topAnchor, constant: 25, withIdentifier: "closeBtnTop").isActive = true
         closeButton.leftAnchor.constraint(equalTo: mapViewContainer.leftAnchor, constant: 20, withIdentifier: "closeBtnLeft").isActive = true
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         closeButton.isHidden = true 
         
-        mapView.bottomAnchor.constraint(equalTo: mapViewContainer.bottomAnchor, constant: 0, withIdentifier: "mvBottom").isActive = true
-        mapView.topAnchor.constraint(equalTo: mapViewContainer.topAnchor, constant: 0, withIdentifier: "mvTop").isActive = true
         
         imageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10, withIdentifier: "leftAnchor").isActive = true
         //imageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50, withIdentifier: "ivTopAnchor").isActive = true
         imageView.widthAnchor.constraint(equalToConstant: screenWidth / 1.5).isActive = true
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1 / aMultiplier).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: mapViewContainer.topAnchor, constant: -10).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: weatherView.topAnchor, constant: -10).isActive = true
         mapViewContainer.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 10).isActive = true
         
         let touchGesture = UITapGestureRecognizer(target: self, action: #selector(enlargeView))
@@ -166,7 +228,13 @@ class ExtraViewController: UIViewController {
         
         //apViewContainer.heightAnchor.constraint(equalToConstant: (screenHeight - 30) / 2, withIdentifier: "heightAnchor").isActive = true
         
-        self.centerConstraint = mapViewContainer.heightAnchor.constraint(equalToConstant: (screenHeight - 30) / 2)
+        var multiplier: CGFloat = 2
+        
+        if UIDevice().userInterfaceIdiom == .pad {
+            multiplier = 2.5
+        }
+        
+        self.centerConstraint = mapViewContainer.heightAnchor.constraint(equalToConstant: (screenHeight - 30) / multiplier)
         self.centerConstraint.isActive = true
         
         
@@ -181,14 +249,32 @@ class ExtraViewController: UIViewController {
         weatherView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
         
         topWeatherConstraint = weatherView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
-        heightWeatherConstraint = weatherView.heightAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 0.5)
-        bottomWeatherConstraint = weatherView.bottomAnchor.constraint(equalTo: imageView.topAnchor, constant: -10)
+        print(screenHeight)
+        print(UIScreen.main.nativeBounds.height/screenHeight)
+        
+        var multiplier: CGFloat = 1
+        if screenHeight < 850 || UIDevice().userInterfaceIdiom == .pad {
+            multiplier = 0.6
+        }
+        
+        heightWeatherConstraint = weatherView.heightAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: multiplier)
+        bottomWeatherConstraint = weatherView.bottomAnchor.constraint(equalTo: mapViewContainer.topAnchor, constant: -10)
         heightWeatherConstraint.isActive = true
         bottomWeatherConstraint.isActive = true
         
         let gst = UITapGestureRecognizer(target: self, action: #selector(openWeather))
         weatherView.addGestureRecognizer(gst)
         weatherView.isUserInteractionEnabled = true
+        
+        //infoTextField.backgroundColor = .red
+        //weatherView.addSubview(infoTextField)
+        //weatherView.bringSubviewToFront(infoTextField)
+        //infoTextField.delegate = self
+        //infoTextField.isScrollEnabled = false
+//        infoTextField.widthAnchor.constraint(equalToConstant: 100).isActive = true
+//        infoTextField.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        //infoTextField.topAnchor.constraint(equalTo: weatherView.topAnchor).isActive = true
+        //infoTextField.centerXAnchor.constraint(equalTo: weatherView.centerXAnchor).isActive = true
     }
     
     var isShowingWeatherView: Bool = false
@@ -218,7 +304,7 @@ class ExtraViewController: UIViewController {
                 self.topWeatherConstraint.isActive = true
             } else {
                 //blurEffectView.removeFromSuperview()
-                bottomWeatherConstraint = weatherView.bottomAnchor.constraint(equalTo: imageView.topAnchor, constant: -10)
+                bottomWeatherConstraint = weatherView.bottomAnchor.constraint(equalTo: mapViewContainer.topAnchor, constant: -10)
                 weatherView.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1).withAlphaComponent(0.7)
                 self.heightWeatherConstraint.isActive = true
             }
@@ -241,11 +327,13 @@ class ExtraViewController: UIViewController {
         //slidingView.addGestureRecognizer(panGesture)
         drawerZone.addGestureRecognizer(panGesture)
         drawerZone.addSubview(drawerBar)
-        mapView.addSubview(drawerZone)
-        drawerZone.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 0).isActive = true
-        drawerZone.centerXAnchor.constraint(equalTo: mapView.centerXAnchor).isActive = true
+        mapViewContainer.addSubview(drawerZone)
+        drawerZone.topAnchor.constraint(equalTo: mapViewContainer.topAnchor, constant: 0).isActive = true
+        drawerZone.centerXAnchor.constraint(equalTo: mapViewContainer.centerXAnchor).isActive = true
         drawerBar.centerXAnchor.constraint(equalTo: drawerZone.centerXAnchor).isActive = true
         drawerBar.centerYAnchor.constraint(equalTo: drawerZone.centerYAnchor).isActive = true
+        //mapViewContainer.bringSubviewToFront(drawerZone)
+
     }
     
     @objc func close(_ sender: UIButton) {
@@ -255,8 +343,12 @@ class ExtraViewController: UIViewController {
             
             toggleHeight.toggle()
             
+            var multiplier: CGFloat = 2
             
-            self.centerConstraint.constant = (screenHeight - 30) / 2
+            if UIDevice().userInterfaceIdiom == .pad {
+                multiplier = 2.5
+            }
+            self.centerConstraint.constant = (screenHeight - 30) / multiplier
             
             mapViewContainer.isUserInteractionEnabled = true
             UIView.animate(withDuration: 0.5) {
@@ -271,12 +363,17 @@ class ExtraViewController: UIViewController {
         print(mapViewContainer.isUserInteractionEnabled)
     }
     
+    func textViewDidEndEditing(_ textView: UITextView) {
+        textView.resignFirstResponder()
+    }
+    
     @objc func goToImageVc(_ sender: UITapGestureRecognizer) {
         let vc2 = GesturesViewController()
         let vc = ImageDetailViewController()
-        vc2.view.backgroundColor = .white
+        vc.navigationItem.titleView = self.navigationItem.titleView
+        vc.view.backgroundColor = .white
         
-        navigationController?.pushViewController(vc2, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
         
         
     }
@@ -305,9 +402,14 @@ class ExtraViewController: UIViewController {
     var centerConstraint: NSLayoutConstraint!
     var startingConstant: CGFloat  = 0.0
     
+    //TODO: - IDEA: maybe i can remove map constraints from mapviewcontainer when i do this dragging shit
     @objc func detectPan(recognizer: UIPanGestureRecognizer) {
         var shouldAnimate = false
+        var multiplier: CGFloat = 2
         
+        if UIDevice().userInterfaceIdiom == .pad {
+            multiplier = 2.5
+        }
         switch recognizer.state {
         case .began:
             self.startingConstant = self.centerConstraint.constant
@@ -320,13 +422,13 @@ class ExtraViewController: UIViewController {
             let canMove = abs(self.centerConstraint.constant - self.startingConstant) > 50
             
             if  canMove {
-                if (centerConstraint.constant < screenHeight) || (centerConstraint.constant > screenHeight / 2) {
+                if (centerConstraint.constant < screenHeight) || (centerConstraint.constant > screenHeight / multiplier) {
                     shouldAnimate = true
                     if recognizer.velocity(in: self.view).y < 0 {
                         centerConstraint.constant = (screenHeight - 100)
                         
                     } else {
-                        centerConstraint.constant = (screenHeight - 30) / 2
+                        centerConstraint.constant = (screenHeight - 30) / multiplier
                     }
                 } else {
                     centerConstraint.constant = startingConstant

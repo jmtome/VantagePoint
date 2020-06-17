@@ -238,8 +238,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "284"
-            endingLineNumber = "284"
+            startingLineNumber = "381"
+            endingLineNumber = "381"
             landmarkName = "enlargeView(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,8 +254,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "382"
+            endingLineNumber = "382"
             landmarkName = "enlargeView(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -270,8 +270,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
+            startingLineNumber = "372"
+            endingLineNumber = "372"
             landmarkName = "goToImageVc(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -286,10 +286,42 @@
             filePath = "VantagePoint/Controllers/ImageDetailViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "close(_:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CC8C373A-1C88-480F-B356-2071B835217D - f9f3d6ab0a2a7fe"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "VantagePoint.ImageDetailViewController.close(__C.UIButton) -&gt; ()"
+                  moduleName = "VantagePoint"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/juanmanueltome/Desktop/Xcode%20Projects/VantagePoint/VantagePoint/Controllers/ImageDetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "CC8C373A-1C88-480F-B356-2071B835217D - a0dcbb7b9e07d4fd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in VantagePoint.ImageDetailViewController.close(__C.UIButton) -&gt; ()"
+                  moduleName = "VantagePoint"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/juanmanueltome/Desktop/Xcode%20Projects/VantagePoint/VantagePoint/Controllers/ImageDetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -302,8 +334,8 @@
             filePath = "VantagePoint/Controllers/ImageViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
             landmarkName = "doubleTap(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -318,8 +350,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "326"
-            endingLineNumber = "326"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
             landmarkName = "detectPan(recognizer:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -334,8 +366,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "356"
-            endingLineNumber = "356"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
             landmarkName = "viewWillLayoutSubviews()"
             landmarkType = "7">
          </BreakpointContent>
@@ -350,8 +382,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "328"
-            endingLineNumber = "328"
+            startingLineNumber = "430"
+            endingLineNumber = "430"
             landmarkName = "detectPan(recognizer:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -366,8 +398,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
+            startingLineNumber = "284"
+            endingLineNumber = "284"
             landmarkName = "openWeather(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -382,8 +414,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "343"
-            endingLineNumber = "343"
+            startingLineNumber = "445"
+            endingLineNumber = "445"
             landmarkName = "detectPan(recognizer:)"
             landmarkType = "7">
             <Locations>

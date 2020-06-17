@@ -14,6 +14,10 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     
     let scrollView = UIScrollView(frame: .zero)
 
+    lazy var aMultiplier: CGFloat = {
+           return (imageView?.image?.size.width)! / (imageView?.image?.size.height)!
+       }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,6 +29,12 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
         gstr.delaysTouchesBegan = true
         
         
+        //esto me da problemas con el scrollview, 
+        imageView.widthAnchor.constraint(equalToConstant: screenWidth / 1).isActive = true
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1 / aMultiplier).isActive = true
+        
+        
+        
         scrollView.addGestureRecognizer(gstr)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
@@ -34,17 +44,20 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
         scrollView.maximumZoomScale = 5
         scrollView.zoomScale = 1
 
+        imageView.backgroundColor = .red
         scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        //scrollView.backgroundColor = .red
         
-        imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        imageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0).isActive = true
+        //imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        //imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
         //imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-        
+        imageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        //imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         view.backgroundColor = .white
         //navigationController?.hidesBarsOnTap = true
        

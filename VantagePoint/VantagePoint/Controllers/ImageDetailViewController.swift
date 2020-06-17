@@ -13,7 +13,7 @@ class ImageDetailViewController: UIViewController, UINavigationBarDelegate {
     private let imageView: UIImageView = {
         let image = UIImageView(frame: .zero)
         image.image = #imageLiteral(resourceName: "London").roundedImage
-        image.contentMode = .scaleAspectFit
+        image.contentMode = .scaleAspectFill
         //image.widthAnchor.constraint(equalToConstant: screenHeight / 2.5, withIdentifier: "imageWidth").isActive = true
         image.translatesAutoresizingMaskIntoConstraints = false
         image.isUserInteractionEnabled = true
@@ -27,16 +27,10 @@ class ImageDetailViewController: UIViewController, UINavigationBarDelegate {
         return table
     }()
     
-    
-//     init(closeButton: UIButton) {
-//        self.closeButton = closeButton
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
+    lazy var aMultiplier: CGFloat = {
+        return (imageView.image?.size.width)! / (imageView.image?.size.height)!
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -44,16 +38,19 @@ class ImageDetailViewController: UIViewController, UINavigationBarDelegate {
         
         
         self.view.addSubview(imageView)
-    
+
+        
         imageView.isUserInteractionEnabled = true
         let gst = UITapGestureRecognizer(target: self, action: #selector(showImageInDetail))
         imageView.addGestureRecognizer(gst)
         
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -60).isActive = true
-        imageView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
-        //imageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        imageView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
-        // Do any additional setup after loading the view.
+        imageView.widthAnchor.constraint(equalToConstant: screenWidth / 1 - 10).isActive = true
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1 / aMultiplier).isActive = true
+        
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        //imageView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        //imageView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         setupTableView()
         
 
@@ -62,37 +59,11 @@ class ImageDetailViewController: UIViewController, UINavigationBarDelegate {
         if sender.state == .ended {
             
             let imgVC = ImageViewController(image: #imageLiteral(resourceName: "London"))
-//            let imageView: UIImageView = {
-//                let view = UIImageView(image: #imageLiteral(resourceName: "London"))
-//                return view
-//            }()
-            //let imgVC = Test2ViewController()
             navigationController?.pushViewController(imgVC, animated: true)
         }
     }
     
-    private func addNavigationBar() {
-        let height: CGFloat = 75
-        var statusBarHeight: CGFloat = 0
-        if #available(iOS 13.0, *) {
-            statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-        } else {
-            statusBarHeight = UIApplication.shared.statusBarFrame.height
-        }
-        let navbar = UINavigationBar(frame: CGRect(x: 0, y: statusBarHeight, width: UIScreen.main.bounds.width, height: height))
-        navbar.backgroundColor = UIColor.white
-        navbar.delegate = self as? UINavigationBarDelegate
-
-        let navItem = UINavigationItem()
-        navItem.title = "Sensor Data"
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(close))
-
-        navbar.items = [navItem]
-
-        view.addSubview(navbar)
-
-        self.view?.frame = CGRect(x: 0, y: height, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - height))
-    }
+    
     
     @objc func close(_ sender: UIButton) {
         dismiss(animated: true) {
@@ -104,7 +75,7 @@ class ImageDetailViewController: UIViewController, UINavigationBarDelegate {
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -50, withIdentifier: "tvTop").isActive = true
+        tableView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10, withIdentifier: "tvTop").isActive = true
         tableView.heightAnchor.constraint(equalToConstant: screenHeight / 2).isActive = true
         tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0, withIdentifier: "tvLeft").isActive = true
         tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0, withIdentifier: "tvRight").isActive = true
@@ -121,23 +92,70 @@ extension ImageDetailViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 5
-        case 1:
             return 3
+        case 1:
+            return 5
         default:
             return 3
         }
     }
     
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath)
-        cell.textLabel?.text = "hola pepe"
+        
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath)
+        let cell = UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "newCell")
+        
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                cell.textLabel?.text = "City"
+                cell.detailTextLabel?.text = "pepe1"
+            case 1:
+                cell.textLabel?.text = "Longitude"
+                cell.detailTextLabel?.text = "pepe2"
+            case 2:
+                cell.textLabel?.text = "Latitude"
+                cell.detailTextLabel?.text = "pepe3"
+            default:
+                cell.textLabel?.text = "pepe"
+                cell.detailTextLabel?.text = "pepe4"
+
+            }
+        case 1:
+            switch indexPath.row {
+            case 0:
+                cell.textLabel?.text = "ISO"
+                cell.detailTextLabel?.text = "pepe5"
+            case 1:
+                cell.textLabel?.text = "Shutter Speed"
+                cell.detailTextLabel?.text = "pepe6"
+            case 2:
+                cell.textLabel?.text = "Aperture"
+                cell.detailTextLabel?.text = "pepe7"
+            case 3:
+                cell.textLabel?.text = "Camera"
+                cell.detailTextLabel?.text = "pepe camera"
+            case 4:
+                cell.textLabel?.text = "Lens"
+                cell.detailTextLabel?.text = "pepe lens"
+            default:
+                cell.textLabel?.text = "pepe"
+                cell.detailTextLabel?.text = "pepe8"
+            }
+        default: break
+            
+        }
+        
+        //cell.textLabel?.text = "hola pepe"
         return cell
     }
     
  
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

@@ -36,6 +36,7 @@
 		C86444D124981C9B002AE677 /* Test2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test2ViewController.swift; sourceTree = "<group>"; };
 		C86444D324985483002AE677 /* TVC3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVC3ViewController.swift; sourceTree = "<group>"; };
 		C86444D5249857A3002AE677 /* GesturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesViewController.swift; sourceTree = "<group>"; };
+		C872EB68249A876F0089E13C /* VantagePoint.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VantagePoint.entitlements; sourceTree = "<group>"; };
 		C8759B69248AD4B90098004B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C8759B6B248AFD730098004B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		C8773C6824931B490000FCFB /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -143,6 +144,7 @@
 		C8D7401E2489BFE900EB91E6 /* VantagePoint */ = {
 			isa = PBXGroup;
 			children = (
+				C872EB68249A876F0089E13C /* VantagePoint.entitlements */,
 				C8D7402D2489BFEB00EB91E6 /* Info.plist */,
 				C8C64767248FDFBD0047EA59 /* Cells */,
 				C8C64762248FDF4B0047EA59 /* Controllers */,
@@ -384,6 +386,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VantagePoint/VantagePoint.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YBSZVA7CYQ;
 				INFOPLIST_FILE = VantagePoint/Info.plist;
@@ -393,6 +396,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jmt.VantagePoint;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -402,6 +406,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VantagePoint/VantagePoint.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YBSZVA7CYQ;
 				INFOPLIST_FILE = VantagePoint/Info.plist;
@@ -411,6 +416,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jmt.VantagePoint;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
