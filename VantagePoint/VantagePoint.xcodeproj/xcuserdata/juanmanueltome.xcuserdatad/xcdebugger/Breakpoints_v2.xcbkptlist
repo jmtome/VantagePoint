@@ -238,8 +238,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
+            startingLineNumber = "284"
+            endingLineNumber = "284"
             landmarkName = "enlargeView(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,8 +254,8 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "285"
+            endingLineNumber = "285"
             landmarkName = "enlargeView(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -270,9 +270,9 @@
             filePath = "VantagePoint/Controllers/ExtraViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
-            landmarkName = "enlargeView2(_:)"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
+            landmarkName = "goToImageVc(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -290,38 +290,6 @@
             endingLineNumber = "98"
             landmarkName = "close(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "CC8C373A-1C88-480F-B356-2071B835217D - f9f3d6ab0a2a7fe"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "VantagePoint.ImageDetailViewController.close(__C.UIButton) -&gt; ()"
-                  moduleName = "VantagePoint"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/juanmanueltome/Desktop/Xcode%20Projects/VantagePoint/VantagePoint/Controllers/ImageDetailViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98"
-                  offsetFromSymbolStart = "32">
-               </Location>
-               <Location
-                  uuid = "CC8C373A-1C88-480F-B356-2071B835217D - a0dcbb7b9e07d4fd"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in VantagePoint.ImageDetailViewController.close(__C.UIButton) -&gt; ()"
-                  moduleName = "VantagePoint"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/juanmanueltome/Desktop/Xcode%20Projects/VantagePoint/VantagePoint/Controllers/ImageDetailViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "100"
-                  endingLineNumber = "100"
-                  offsetFromSymbolStart = "4">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -338,6 +306,118 @@
             endingLineNumber = "54"
             landmarkName = "doubleTap(_:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A577AA66-B15C-47F2-B480-49BD52A6E642"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VantagePoint/Controllers/ExtraViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
+            landmarkName = "detectPan(recognizer:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F922FF12-9439-43EE-934A-D52BF8246B70"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VantagePoint/Controllers/ExtraViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "356"
+            endingLineNumber = "356"
+            landmarkName = "viewWillLayoutSubviews()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E2F73768-3D9C-466F-8B81-27EEA7A0EA98"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VantagePoint/Controllers/ExtraViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
+            landmarkName = "detectPan(recognizer:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F5BA32DE-FBFD-44C8-946E-B6F0D8383737"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VantagePoint/Controllers/ExtraViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
+            landmarkName = "openWeather(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AE41C81A-2602-4BF0-BA18-AD3717CB0457"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VantagePoint/Controllers/ExtraViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "343"
+            endingLineNumber = "343"
+            landmarkName = "detectPan(recognizer:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AE41C81A-2602-4BF0-BA18-AD3717CB0457 - d2fe9b0e72f7c08d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "VantagePoint.ExtraViewController.detectPan(recognizer: __C.UIPanGestureRecognizer) -&gt; ()"
+                  moduleName = "VantagePoint"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/juanmanueltome/Desktop/Xcode%20Projects/VantagePoint/VantagePoint/Controllers/ExtraViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "343"
+                  endingLineNumber = "343"
+                  offsetFromSymbolStart = "4940">
+               </Location>
+               <Location
+                  uuid = "AE41C81A-2602-4BF0-BA18-AD3717CB0457 - 7fb9df36b6bd410e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in VantagePoint.ExtraViewController.detectPan(recognizer: __C.UIPanGestureRecognizer) -&gt; ()"
+                  moduleName = "VantagePoint"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/juanmanueltome/Desktop/Xcode%20Projects/VantagePoint/VantagePoint/Controllers/ExtraViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "309"
+                  endingLineNumber = "309"
+                  offsetFromSymbolStart = "81">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

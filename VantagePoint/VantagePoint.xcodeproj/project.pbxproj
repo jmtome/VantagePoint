@@ -70,12 +70,12 @@
 				C8759B6B248AFD730098004B /* DetailViewController.swift */,
 				C8773C6824931B490000FCFB /* MapViewController.swift */,
 				C8D1AF432493CF9C002A613B /* LocationSearchTable.swift */,
-				C80E5C4724958B84006D22B4 /* ExtraViewController.swift */,
 				C860812D2496958400E99308 /* ImageDetailViewController.swift */,
 				C86444CF249812F2002AE677 /* ImageViewController.swift */,
 				C86444D124981C9B002AE677 /* Test2ViewController.swift */,
 				C86444D324985483002AE677 /* TVC3ViewController.swift */,
 				C80E5C492495C4EE006D22B4 /* TestsViewController.swift */,
+				C80E5C4724958B84006D22B4 /* ExtraViewController.swift */,
 				C86444D5249857A3002AE677 /* GesturesViewController.swift */,
 			);
 			path = Controllers;
