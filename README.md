@@ -14,4 +14,6 @@
 - [x] Sort by favorites
 - [ ] Clean up spaghetti code
 
-![Alt Text](animated.gif)
+# - 
+
+<img src="animated.gif" width="400"/>
