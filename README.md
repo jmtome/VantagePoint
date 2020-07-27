@@ -1,8 +1,15 @@
-# - VantagePoint - 
-App entry for the AppJam hackaton. App to store geographic places for photography
+# VantagePoint
+## Simple Locations App to store geographic places for photography
+## Originally made for a reddit.com/r/swift hackaton
 
-<img src="icon.jpg" alt="drawing" width="200"/>
 
+### ToDo's
+- [x] Locate spots and save them
+- [ ] Persist data
+- [x] Simple interface for both day/night modes
+- [x] Search for location
+- [ ] Add Weather with forecast
+- [ ] Improve UI
+- [ ] Clean up spaghetti code
 
-![](animated.gif)
-
+![Alt Text](animated.gif)
