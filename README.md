@@ -10,6 +10,8 @@
 - [x] Search for location
 - [ ] Add Weather with forecast
 - [ ] Improve UI
+- [x] Add Favorites
+- [x] Sort by favorites
 - [ ] Clean up spaghetti code
 
 ![Alt Text](animated.gif)
